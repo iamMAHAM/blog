@@ -4,10 +4,14 @@ import { config } from 'dotenv';
 import { inProduction } from './config/env.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { connectDB } from './config/db.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-config();
+config({
+  path: path.join(process.cwd(), '.env.local'),
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -21,6 +25,15 @@ if (inProduction) {
   });
 }
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+connectDB()
+  .then(() => {
+    app.listen(3000, () => {
+      console.log('Server running on port 3000');
+    });
+  })
+  .catch((e) => {
+    console.log(
+      'An orror has occured while connecting to mongodb : ',
+      e.message
+    );
+  });
