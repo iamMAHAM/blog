@@ -1,11 +1,12 @@
 import User from '../models/user.js';
+// eslint-disable-next-line no-unused-vars
 import express from 'express';
 
 class UserController {
   /**
    *
-   * @param { Request} req
-   * @param {Response} res
+   * @param {express.Request} req
+   * @param {express.Response} res
    */
   static async getUser(req, res) {
     const { id } = req.params;
@@ -29,8 +30,8 @@ class UserController {
 
   /**
    *
-   * @param {Request} req
-   * @param {Response} res
+   * @param {express.Request} req
+   * @param {express.Response} res
    */
   static async createUser(req, res) {
     const { role, ...body } = req.body;
@@ -46,14 +47,14 @@ class UserController {
 
   /**
    *
-   * @param {Request} req
-   * @param {Response} res
+   * @param {express.Request} req
+   * @param {express.Response} res
    */
   static deleteUser(req, res) {}
   /**
    *
-   * @param {Request} req
-   * @param {Response} res
+   * @param {express.Request} req
+   * @param {express.Response} res
    */
   static editUser(req, res) {}
 }
