@@ -39,6 +39,11 @@ const userSchema = new Schema({
     ],
     default: [],
   },
+  role: {
+    type: String,
+    required: false,
+    default: 'user',
+  },
 });
 
 export default model('user', userSchema);
