@@ -1,7 +1,7 @@
 import User from '../models/user.js';
 // eslint-disable-next-line no-unused-vars
 import express from 'express';
-import bcrypt from 'bcrypt';
+import { compareHash, hash } from '../utils/hash.js';
 class UserController {
   /**
    *
@@ -20,9 +20,7 @@ class UserController {
         });
       }
 
-      res
-        .status(404)
-        .json({ status: false, message: 'utilisateur non trouvé' });
+      res.status(404).json({ status: false, message: '  non trouvé' });
     } catch (e) {
       console.log('erreur');
       res
@@ -43,7 +41,7 @@ class UserController {
     try {
       const user = await User.create({
         ...body,
-        password: await bcrypt.hash(password, await bcrypt.genSalt()),
+        password: hash(password),
       });
 
       res.status(201).json({
@@ -89,9 +87,7 @@ class UserController {
           .json({ status: false, message: 'utiliseur non trouvé' });
       }
 
-      console.log(password, user.toObject());
-
-      if (await bcrypt.compare(password, user.password)) {
+      if (compareHash(password, user.password)) {
         let updatedUser;
 
         if (newPassword) {
@@ -99,7 +95,7 @@ class UserController {
             { _id: id },
             {
               ...body,
-              password: await bcrypt.hash(newPassword, await bcrypt.genSalt()),
+              password: hash(password),
             }
           );
         } else {
@@ -116,6 +112,34 @@ class UserController {
     } catch (e) {
       console.log(e);
       res.json({ status: false, message: e.message });
+    }
+  }
+
+  /**
+   *
+   * @param {express.Request} req
+   * @param {express.Response} res
+   */
+  static async loginUser(req, res) {
+    const { email, password } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(200).json({
+          status: true,
+          message: 'utilisateur non trouvé',
+        });
+      }
+
+      if (compareHash(password, user.password)) {
+        // l'utilisateur est connecté
+
+        res.status(200).json({});
+      }
+    } catch (e) {
+      res.status(500).json({ status: false, message: 'Internal Server Error' });
     }
   }
 }

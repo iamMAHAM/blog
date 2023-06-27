@@ -11,16 +11,18 @@
     "server": "nodemon ./api/app.js"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.3.0"
+    "mongoose": "^7.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",
