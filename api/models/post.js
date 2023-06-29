@@ -16,6 +16,7 @@ const postSchema = new Schema({
   },
   tags: {
     type: [String],
+    default: [],
   },
 });
 

@@ -61,8 +61,15 @@ class UserController {
    */
   static async deleteUser(req, res) {
     const { id } = req.params;
+    const auth = req.auth;
 
     try {
+      if (id !== auth._id) {
+        return res
+          .status(401)
+          .json({ status: false, message: 'action non authorisé' });
+      }
+
       await User.deleteOne({ _id: id });
       res.status(200).json({ status: true, message: 'succès' });
     } catch (e) {
@@ -81,6 +88,7 @@ class UserController {
 
     try {
       const user = await User.findById(id);
+      const auth = req.auth;
 
       if (!user) {
         return res
@@ -88,7 +96,7 @@ class UserController {
           .json({ status: false, message: 'utiliseur non trouvé' });
       }
 
-      if (compareHash(password, user.password)) {
+      if (compareHash(password, user.password) && auth._id === id) {
         let updatedUser;
 
         if (newPassword) {
