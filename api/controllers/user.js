@@ -2,6 +2,7 @@ import User from '../models/user.js';
 // eslint-disable-next-line no-unused-vars
 import express from 'express';
 import { compareHash, hash } from '../utils/hash.js';
+import { generateToken } from '../utils/token.js';
 class UserController {
   /**
    *
@@ -126,19 +127,18 @@ class UserController {
     try {
       const user = await User.findOne({ email });
 
-      if (!user) {
+      if (user && (await compareHash(password, user.password))) {
+        // l'utilisateur est connecté
+        console.log(generateToken(user.toObject()));
+        res.cookie('token', generateToken(user.toObject()));
         return res.status(200).json({
           status: true,
-          message: 'utilisateur non trouvé',
+          user,
         });
       }
-
-      if (compareHash(password, user.password)) {
-        // l'utilisateur est connecté
-
-        res.status(200).json({});
-      }
+      res.status(401).json({ status: false, message: 'identifiant invalide' });
     } catch (e) {
+      console.log(e);
       res.status(500).json({ status: false, message: 'Internal Server Error' });
     }
   }

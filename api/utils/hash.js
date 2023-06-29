@@ -16,7 +16,8 @@ export const hash = async (mdp) => {
 export const compareHash = async (from, to) => {
   try {
     return await brcypt.compare(from, to);
-  } catch {
+  } catch (e) {
+    console.log(e);
     return false;
   }
 };

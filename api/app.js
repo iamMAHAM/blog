@@ -23,7 +23,6 @@ app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, '../dist')));
 
 app.use('/api/user', userRouter);
-
 if (inProduction) {
   app.get('/*', (_, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
