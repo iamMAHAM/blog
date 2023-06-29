@@ -4,12 +4,13 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Login from './component/login'
 import Register from './component/register'
-
+import Header from './component/header'
 
 function App() {
   return (
     <>
-    <Register/>
+    <Header />
+    {/* <Register/> */}
      {/* <Login/> */}
       
     </>

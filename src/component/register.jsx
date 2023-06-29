@@ -1,3 +1,5 @@
+import '../register.css'
+
 export default function Register(){
     return(
         <form action="" className="inscrire">
