@@ -8,6 +8,7 @@ import { connectDB } from './config/db.js';
 import userRouter from './routes/user.js';
 import postRouter from './routes/post.js';
 import cookieParser from 'cookie-parser';
+import commentRouter from './routes/comment.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
+app.use('/api/comment', commentRouter);
 
 if (inProduction) {
   app.get('/*', (_, res) => {

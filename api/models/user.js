@@ -17,15 +17,6 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  comments: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'comment',
-      },
-    ],
-    default: [],
-  },
   posts: {
     type: [
       {

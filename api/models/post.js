@@ -18,6 +18,15 @@ const postSchema = new Schema({
     type: [String],
     default: [],
   },
+  comments: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'comment',
+      },
+    ],
+    default: [],
+  },
 });
 
 export default model('post', postSchema);

@@ -12,9 +12,9 @@ const withUser = (req, res, next) => {
   const verifiedToken = verifyToken(token);
 
   if (verifiedToken) {
-    req.auth = verifiedToken;
+    req.user = verifiedToken;
   } else {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
   next();
 };

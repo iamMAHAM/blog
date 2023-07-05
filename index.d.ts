@@ -1,8 +1,8 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 
 declare module 'express' {
   interface Request {
-    auth: {
+    user: {
       _id: string;
       fullname: string;
       password: string;

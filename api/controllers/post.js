@@ -1,4 +1,5 @@
 import Post from '../models/post.js';
+import User from '../models/user.js';
 // eslint-disable-next-line no-unused-vars
 import express from 'express';
 
@@ -10,12 +11,21 @@ class PostController {
    */
   static async createPost(req, res) {
     try {
-      const user = req.auth;
+      const user = req.user;
 
       const post = await Post.create({
         ...req.body,
         author: user._id,
       });
+
+      await User.findOneAndUpdate(
+        { _id: user._id },
+        {
+          posts: {
+            $push: post._id,
+          },
+        }
+      );
 
       res.status(201).json({ status: true, post: { ...post.toObject() } });
     } catch (e) {
@@ -29,7 +39,7 @@ class PostController {
    */
 
   static async updatePost(req, res) {
-    const user = req.auth;
+    const user = req.user;
     const { id } = req.params;
 
     try {
@@ -39,7 +49,7 @@ class PostController {
         throw new Error('Post non trouvé');
       }
 
-      if (post.author !== user._id) {
+      if (post.useror !== user._id) {
         throw new Error('action non authorisé');
       }
 
@@ -59,7 +69,7 @@ class PostController {
    */
 
   static async deletePost(req, res) {
-    const user = req.auth;
+    const user = req.user;
     const { id } = req.params;
     try {
       const post = await Post.findById(id);
@@ -67,7 +77,7 @@ class PostController {
         throw new Error('post non trouvé');
       }
 
-      if (post.author !== user._id) {
+      if (post.useror !== user._id) {
         throw new Error('Action non authorisé');
       }
 
@@ -93,11 +103,11 @@ class PostController {
         throw new Error("post n'existe pas");
       }
 
-      const fullPost = await post.populate('author', {
-        select: 'username fullname role',
-      });
+      const fullPost = await (
+        await post.populate('author', 'username fullname role email')
+      ).populate('comments');
 
-      res.status(200).json({ status: true, post: { ...fullPost } });
+      res.status(200).json({ status: true, post: { ...fullPost.toObject() } });
     } catch (e) {
       res.json({ status: false, message: e.message });
     }

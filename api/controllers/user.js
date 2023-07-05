@@ -61,7 +61,7 @@ class UserController {
    */
   static async deleteUser(req, res) {
     const { id } = req.params;
-    const auth = req.auth;
+    const auth = req.user;
 
     try {
       if (id !== auth._id) {
@@ -88,7 +88,7 @@ class UserController {
 
     try {
       const user = await User.findById(id);
-      const auth = req.auth;
+      const auth = req.user;
 
       if (!user) {
         return res
