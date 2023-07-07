@@ -49,7 +49,7 @@ class PostController {
         throw new Error('Post non trouvé');
       }
 
-      if (post.useror !== user._id) {
+      if (post.user !== user._id) {
         throw new Error('action non authorisé');
       }
 
